@@ -48,8 +48,8 @@ class Stats:
                 books_per_month[month] += 1
 
         # Prepare for matplotlib
-        months = sorted(pages_per_month.keys())
-        pages = [pages_per_month[year] for month in months]
+        months = sorted(books_per_month.keys())
+        pages = [books_per_month[year] for month in months]
 
         # Matplotlib
         # SOURCE: https://matplotlib.org/stable/plot_types/basic/plot.html#sphx-glr-plot-types-basic-plot-py
@@ -193,9 +193,19 @@ class Stats:
                     self.read_by_year()
                     break
                 if choice == "4":
+                    flag = True
+                    while flag:
+                        year = (input("Enter the year you want to see: "))
+                        try:
+                            year = int(year)
+                            flag = False
+                            break
+                        except ValueError:
+                            continue
+
                     print("Books Read by Month")
                     print("_____________________________________")
-                    self.read_by_month()
+                    self.read_by_month(year)
                     break
                 if choice == "5":
                     print("Pages Read by Year")
@@ -203,9 +213,18 @@ class Stats:
                     self.pages_by_year()
                     break
                 if choice == "6":
+                    flag = True
+                    while flag:
+                        year = (input("Enter the year you want to see: "))
+                        try:
+                            year = int(year)
+                            flag = False
+                            break
+                        except ValueError:
+                            continue
                     print("Pages Read by Month")
                     print("_____________________________________")
-                    self.read_by_month()
+                    self.read_by_month(year)
                     break
                 if choice == "7":
                     break_outer = True

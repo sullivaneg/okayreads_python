@@ -12,7 +12,7 @@ class Comms:
     def __init__(self, bookshelf):
         self.bookshelf = bookshelf
 
-    def make_book(self, title: str, author: str, isbn: int, pages: int, genre: str, year_published: int):
+    def make_book(self, title: str, author: str, isbn: int, pages: int, genre: str, year_published: int, in_lists: list):
         book = Book(title, author, isbn, pages, genre, year_published)
         return book
 
@@ -38,7 +38,8 @@ class Comms:
                 check = input(f"Is {book.title} by {book.author} Published {book.Year_Published} ISBN: {book.isbn} your book? Y or N")
                 title, author, isbn, pages, genre, year_published = book.title, book.author, book.isbn, book.pages, \
                     book.genre, book.Year_Published
+                _in_lists = []
                 if check.lower() == 'y':
-                    instance = self.make_book(title, author, isbn, pages, genre, year_published)
+                    instance = self.make_book(title, author, isbn, pages, genre, year_published, _in_lists)
                     print("")
                     return instance

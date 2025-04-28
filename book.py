@@ -1,17 +1,17 @@
 class Book:
-    def __init__(self, title: str, author: str, isbn: int, pages: int, genre: str, year_published: int, _in_lists: list):
+    def __init__(self, title: str, author: str, isbn: int, pages: int, genre: str = '', year_published: int = None, _in_lists: list = None):
         self.title = title
         self.author = author
         self.isbn = isbn
         self.pages = pages
-        self.genre = genre
-        self.year_published = year_published
-        self._in_lists = []
+        self.genre = genre if genre is not None else 'Unknown Genre'
+        self.year_published = year_published if year_published is not None else 'Unknown year published'
+        self._in_lists = _in_lists if _in_lists is not None else []
+        self._rating =None
 
     def match(self, filter_text: str):
-        return filter_text.lower() in self.title.lower() or filter_text.lower() == self.isbn or \
-            (any(filter_text.lower() in str(g).lower() for g in self.genre) or \
-             filter_text.lower() in self.author.lower() or filter_text == self.pages)
+        return filter_text.lower() in self.title.lower() or filter_text.lower() == self.isbn  or \
+             filter_text.lower() in self.author.lower() or filter_text == self.pages
 
     def __str__(self):
         return f'{self.title} by {self.author}, {self.pages} pages, published in {self.year_published}(ISBN: {self.isbn})'
@@ -43,11 +43,11 @@ class Book:
 
     @property
     def rating(self):
-        return self.rating
+        return self._rating
 
     @rating.setter
     def rating(self, value):
-        self.rating = float(value)
+        self._rating = float(value)
 
     @property
     def date_read(self):
