@@ -1,3 +1,5 @@
+import pandas as pd
+
 from communication import *
 import datetime
 from stats import *
@@ -8,6 +10,7 @@ class Bookshelf:
         self.books_read = []
         self.want_to_read = []
         self.favorites = []
+        self._username = None
 
     def profile(self):
         print(f'{self.username}\'s profile')
@@ -17,11 +20,11 @@ class Bookshelf:
 
     @property
     def username(self):
-        return self.username
+        return self._username
 
     @username.setter
     def username(self, username):
-        self.username = username
+        self._username = username
 
     def add_book(self, title):
         result = Comms.search_books_by_title(title)
@@ -115,12 +118,33 @@ class Bookshelf:
         return result
 
 
-    def export_data(self):
-        pass
+    def export_data(self, from_list, title, author, isbn, my_rating, original_publication_year, date_read, date_added,
+                    shelves, bookshelves, done_books):
+        # BOOKS READ
+        for item in from_list:
+            if item not in done_books:
+                if from_list == "books_read":
+                    shelves.append("read")
+                    date_read.append(item.date_read)
+                    date_added.append(item.date_read)
+                    rating = (item.my_rating / 2).round(number)
+                    my_rating.append(rating)
+                    if "favorites" in item.in_lists:
+                        bookshelves.append("favorites")
+                elif from_list == "want_to_read":
+                    shelves.append("to-read")
+                title.append(item.title)
+                author.append(item.author)
+                isbn.append(item.isbn)
+                original_publication_year.append(item.year_published)
+                done_books.append(item)
+            else:
+                continue
+
 
     def interface(self):
         username = input("What would you like to be called?")
-        self.username(username)
+        self.username = username
 
         while True:
             print("_________________okayreads_________________")
@@ -266,6 +290,27 @@ class Bookshelf:
 
             # CHOICE 6: EXPORT DATA AS EXCEL FILE
             if choice == 6:
+                # Some columns are intentionally left blank, goodreads doesn't require all the columns to be populated
+                title, author, isbn, my_rating, average_rating, publisher, binding, year_published, \
+                    original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books = \
+                    [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
+
+                self.export_data(self.books_read, title, author, isbn, my_rating, original_publication_year, date_read, date_added,shelves, bookshelves, done_books)
+                self.export_data(self.want_to_read,title, author, isbn, my_rating, original_publication_year, date_read, date_added,shelves, bookshelves, done_books)
+
+                #Create Dataframe
+                # SOURCES: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
+                data = {'Title': title, 'Author': author, 'ISBN': isbn, 'My Rating': my_rating, 'Average Rating': average_rating,
+                        'Publisher': publisher, 'binding': binding, 'Year Published':year_published, 'Original Publication Year':
+                        original_publication_year, 'Date Read': date_read, 'Date Added': date_added, 'Shelves': shelves,
+                        'Bookshelves': bookshelves, 'My Review': my_review}
+                df = pd.DataFrame(data)
+
+                #Export to Excel
+                #SOURCES: My final CSI160 Project / https://stackoverflow.com/questions/55170300/how-to-save-a-pandas-dataframe-to-an-excel-file
+                df.to_excel("bookshelf.xlsx", index=False)
+
+
 
 
 

@@ -1,7 +1,3 @@
-
-#     def to_short_string(self):
-#         return f'Book: {self.name} - {self.author} - (ISBN: {self.isbn})'
-
 class Book:
     def __init__(self, title: str, author: str, isbn: int, pages: int, genre: str, year_published: int, _in_lists: list):
         self.title = title
