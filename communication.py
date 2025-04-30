@@ -33,8 +33,8 @@ class Comms:
             for doc in response.json()['docs']:
                 book = Results(
                     author=doc.get('author_name', ['unknown author'])[0], title = doc.get('title', 'unknown title'), \
-                    Year_Published = doc.get('first_publish_year', 'Unknown'), isbn = doc.get('isbn', 'Unknown ISBN'), \
-                    pages = doc.get('number_of_pages', 'N/A'), genre = doc.get('subject', 'unknown genre'))
+                    Year_Published = doc.get('first_publish_year', 'Unknown'), isbn = doc.get('cover_i', 'Unknown ISBN'), \
+                    pages = doc.get('number_of_pages', 0), genre = doc.get('subject', 'unknown genre'))
                 check = input(f"Is {book.title} by {book.author} Published {book.Year_Published} ISBN: {book.isbn} your book? Y or N")
                 title, author, isbn, pages, genre, year_published = book.title, book.author, book.isbn, book.pages, \
                     book.genre, book.Year_Published

@@ -1,8 +1,7 @@
 import pandas as pd
 
 from communication import *
-import datetime
-from stats import *
+from datetime import datetime
 
 class Bookshelf:
     def __init__(self, date_created):
@@ -66,6 +65,17 @@ class Bookshelf:
                     except ValueError:
                         print("Invalid input. Please enter a date in the format YYYY-MM-DD: ")
                         continue
+
+                while True:
+                    check = input("How many pages did your book have?: ")
+                    try:
+                        pages = int(check)
+                        result.pages = pages
+                        break
+                    except ValueError:
+                        print("Invalid input. Please enter a number. ")
+                        continue
+
                 self.books_read.append(result)
                 result.in_lists.append("books_read")
                 print("")
@@ -256,7 +266,7 @@ class Bookshelf:
                                         change_rating = input("Enter your choice: ")
                                         if change_rating == "1":
                                             rating = input("Enter your new rating: ")
-                                            item.rating(rating)
+                                            item.rating = rating
                                         break_outer = True
                                         break
                                     elif choice == "n":
