@@ -139,8 +139,8 @@ class Bookshelf:
         return result
 
 
-    def export_data(self, from_list, title, author, isbn, my_rating, original_publication_year, date_read, date_added,
-                    shelves, bookshelves, done_books):
+    def export_data(self, from_list, title, author, isbn, my_rating, average_rating, publisher, binding, year_published,
+                    original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books):
         # BOOKS READ
         for item in from_list:
             if item not in done_books:
@@ -156,14 +156,24 @@ class Bookshelf:
                         bookshelves.append("")
                 elif from_list == self.want_to_read:
                     shelves.append("to-read")
+                    date_read.append("")
+                    date_added.append("")
+                    my_rating.append("")
+                    bookshelves.append("")
                 title.append(item.title)
                 author.append(item.author)
                 isbn.append(item.isbn)
                 original_publication_year.append(item.year_published)
                 done_books.append(item)
+                average_rating.append("")
+                publisher.append("")
+                binding.append("")
+                year_published.append("")
+                my_review.append("")
             else:
-                shelves.append("")
                 continue
+        return (title, author, isbn, my_rating, average_rating, publisher, binding, year_published, original_publication_year,
+                date_read, date_added, shelves, bookshelves, my_review, done_books)
 
 
     def interface(self):
@@ -329,8 +339,12 @@ class Bookshelf:
                     original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books = \
                     [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
 
-                self.export_data(self.books_read, title, author, isbn, my_rating, original_publication_year, date_read, date_added,shelves, bookshelves, done_books)
-                self.export_data(self.want_to_read,title, author, isbn, my_rating, original_publication_year, date_read, date_added,shelves, bookshelves, done_books)
+                self.export_data(self.books_read, title, author, isbn, my_rating, average_rating, publisher, binding,
+                                 year_published,original_publication_year, date_read, date_added, shelves, bookshelves,
+                                 my_review, done_books)
+                self.export_data(self.want_to_read, title, author, isbn, my_rating, average_rating,
+                                  publisher, binding, year_published, original_publication_year,
+                                  date_read, date_added, shelves, bookshelves, my_review, done_books)
 
                 #Create Dataframe
                 # SOURCES: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
@@ -340,9 +354,13 @@ class Bookshelf:
                         'Bookshelves': bookshelves, 'My Review': my_review}
                 df = pd.DataFrame(data)
 
+                print("Exporting to bookshelf.xlsx...")
+                print(df)
+
                 #Export to Excel
                 #SOURCES: My final CSI160 Project / https://stackoverflow.com/questions/55170300/how-to-save-a-pandas-dataframe-to-an-excel-file
                 df.to_excel("bookshelf.xlsx", index=False)
+                print("Exported to bookshelf.xlsx")
 
             if choice == '7':
                 print("Saving...")
