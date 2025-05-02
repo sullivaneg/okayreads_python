@@ -2,6 +2,7 @@ import pandas as pd
 
 from communication import *
 from datetime import datetime
+import pickle_bookshelf as pb
 
 class Bookshelf:
     def __init__(self, date_created):
@@ -143,15 +144,17 @@ class Bookshelf:
         # BOOKS READ
         for item in from_list:
             if item not in done_books:
-                if from_list == "books_read":
+                if from_list == self.books_read:
                     shelves.append("read")
                     date_read.append(item.date_read)
                     date_added.append(item.date_read)
-                    rating = (item.my_rating / 2).round(number)
+                    rating = round(item.my_rating / 2)
                     my_rating.append(rating)
                     if "favorites" in item.in_lists:
                         bookshelves.append("favorites")
-                elif from_list == "want_to_read":
+                    else:
+                        bookshelves.append("")
+                elif from_list == self.want_to_read:
                     shelves.append("to-read")
                 title.append(item.title)
                 author.append(item.author)
@@ -159,12 +162,14 @@ class Bookshelf:
                 original_publication_year.append(item.year_published)
                 done_books.append(item)
             else:
+                shelves.append("")
                 continue
 
 
     def interface(self):
-        username = input("What would you like to be called?")
-        self.username = username
+        if self.username is None:
+            username = input("What would you like to be called?")
+            self.username = username
 
         while True:
             print("_________________okayreads_________________")
@@ -178,6 +183,7 @@ class Bookshelf:
             print("4. Statistics")
             print("5. Change Username")
             print("6. Export your Bookshelf as an Excel file")
+            print("7. Save and Exit")
             choice = input("Enter your choice: ")
 
             # CHOICE 1: ADD BOOK
@@ -314,7 +320,7 @@ class Bookshelf:
             # CHOICE 5: CHANGE USERNAME
             if choice == '5':
                 username = input("Enter your new username: ")
-                self.username(username)
+                self.username = username
 
             # CHOICE 6: EXPORT DATA AS EXCEL FILE
             if choice == '6':
@@ -338,7 +344,11 @@ class Bookshelf:
                 #SOURCES: My final CSI160 Project / https://stackoverflow.com/questions/55170300/how-to-save-a-pandas-dataframe-to-an-excel-file
                 df.to_excel("bookshelf.xlsx", index=False)
 
-
+            if choice == '7':
+                print("Saving...")
+                pb.save_bookshelf(self)
+                print("Exiting...")
+                break
 
 
 
