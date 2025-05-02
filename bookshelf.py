@@ -29,9 +29,25 @@ class Bookshelf:
         self._username = username
 
     def add_book(self, title):
-        result = self.comms.search_books_by_title(title)
+        result = self.search_bookshelf(title)
+        for book in result:
+            choice = input(f"From your bookshelf: {book.to_short_string()} | Is this your book? Y or N: ")
+            if choice.lower() == 'y':
+                result = book
+                break
+            if choice.lower() == 'n':
+                continue
+
         if not result:
-            "Book not found"
+            result = self.comms.search_books_by_title(title)
+
+        if not result or result is None:
+            print("___________________NO RESULT FOUND______________")
+            print(" ")
+            print("Book not found. Please adjust spelling or try a different title.")
+            print(" ")
+            print("__________________________________________________")
+
             return
 
         while True:
@@ -81,6 +97,7 @@ class Bookshelf:
                 result.in_lists.append("books_read")
                 print("")
                 print(f"{result.title} has been added to your read books.")
+                print("")
                 break
 
             if choice == '2':
@@ -88,6 +105,7 @@ class Bookshelf:
                 result.in_lists.append("want_to_read")
                 print ("")
                 print(f"{result.title} has been added to your want-to-read books.")
+                print("")
                 break
 
             if choice == '3':
@@ -95,6 +113,7 @@ class Bookshelf:
                 result.in_lists.append("favorites")
                 print("")
                 print(f"{result.title} has been added to your favorite books.")
+                print("")
             else:
                 break
 
@@ -135,7 +154,7 @@ class Bookshelf:
             if entry.match(string) and entry not in result:
                 result.append(entry)
         if not result:
-            return []
+            return False
         return result
 
 
@@ -148,7 +167,7 @@ class Bookshelf:
                     shelves.append("read")
                     date_read.append(item.date_read)
                     date_added.append(item.date_read)
-                    rating = round(item.my_rating / 2)
+                    rating = round(item.rating / 2)
                     my_rating.append(rating)
                     if "favorites" in item.in_lists:
                         bookshelves.append("favorites")
@@ -198,7 +217,7 @@ class Bookshelf:
 
             # CHOICE 1: ADD BOOK
             if choice == '1':
-                title = input("Search Keyword (author, title, ")
+                title = input("Search Title of your book: ")
                 self.add_book(title)
 
             #CHOICE 2: REMOVE BOOK

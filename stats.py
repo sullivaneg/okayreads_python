@@ -84,7 +84,8 @@ class Stats:
         top_ten = sorted(self.bookshelf.books_read, reverse=True)[:10]
         index = 1
         for book in top_ten:
-            print(f"{i}. {book.to_short_string()}")
+            print(f"{index}. {book.to_short_string()}")
+            index += 1
 
     def pages_by_year(self):
         pages_per_year = defaultdict(int)
@@ -160,13 +161,12 @@ class Stats:
     def interface(self):
         while True:
             break_outer = False
-            print(f"{self.bookshelf.username}'s Statistics")
-            print("__________________________________________")
+            print(" ")
+            print(f"__________________{self.bookshelf.username}'s Statistics_________________________")
             total_pages = self.total_pages(self.bookshelf.books_read)
             total_books = len(self.bookshelf.books_read)
-            print(f"Books Read Read: {total_books}")
-            print(f"Total Pages Read: {total_pages}")
-            print("")
+            print(f"Books Read: {total_books}")
+            print(f"Total Pages Read - All Time: {total_pages}")
             print("___________________________________________")
             print("1. Display all books read ")
             print("2. Display your top 10 books read")

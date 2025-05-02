@@ -30,9 +30,9 @@ class Book:
 
     def to_short_string(self):
         if "books_read" in self._in_lists:
-            return f'Book: {self.title} by {self.author} - (ISBN: {self.isbn}) | READ: {self.date_read} | RATING: {self._rating}'
+            return f'{self.title} by {self.author} - (ISBN: {self.isbn}) | READ: {self.date_read} | RATING: {self._rating}'
         if "want_to_read" in self._in_lists:
-            return f'Book: {self.title} by {self.author} - (ISBN: {self.isbn})'
+            return f'{self.title} by {self.author} - (ISBN: {self.isbn})'
 
     def profile_string(self):
         print(f"____________{self.title}________________")

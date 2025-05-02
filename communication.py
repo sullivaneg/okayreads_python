@@ -20,22 +20,32 @@ class Comms:
         """
         Searches Open Library for a book title and returns the JSON response. Also displays search results.
         """
+        print("Searching Open Library for a book title...")
+        print("To exit search results type 'Exit'")
         base_url = "https://openlibrary.org/search.json"
         params = {'title': title}
-        response = rq.get(base_url, params=params)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-        #return response.json()
+
+        try:
+            response = rq.get(base_url, params=params)
+            response.raise_for_status() # Raise an exception for HTTP errors
+        except rq.exceptions.RequestException as e:
+            print(f"Network error occurred: {e}")
+            return None
+
+        docs = response.json().get('docs', [])
+        if not docs:
+            return None
 
         Results = namedtuple('Results', ['author', 'title', 'Year_Published', 'isbn', 'pages', 'genre'])
 
         run = True
-        while run==True:
+        while run is True:
             for doc in response.json()['docs']:
                 book = Results(
                     author=doc.get('author_name', ['unknown author'])[0], title = doc.get('title', 'unknown title'), \
                     Year_Published = doc.get('first_publish_year', 'Unknown'), isbn = doc.get('cover_i', 'Unknown ISBN'), \
                     pages = doc.get('number_of_pages', 0), genre = doc.get('subject', 'unknown genre'))
-                check = input(f"Is {book.title} by {book.author} Published {book.Year_Published} ISBN: {book.isbn} your book? Y or N")
+                check = input(f"Is {book.title} by {book.author} Published {book.Year_Published} ISBN: {book.isbn} your book? Y or N: ")
                 title, author, isbn, pages, genre, year_published = book.title, book.author, book.isbn, book.pages, \
                     book.genre, book.Year_Published
                 _in_lists = []
@@ -43,3 +53,6 @@ class Comms:
                     instance = self.make_book(title, author, isbn, pages, genre, year_published, _in_lists)
                     print("")
                     return instance
+                if check.lower() == 'exit':
+                    print("Exiting...")
+                    return
