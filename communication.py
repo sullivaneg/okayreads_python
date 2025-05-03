@@ -32,8 +32,8 @@ class Comms:
     def __init__(self, bookshelf):
         self.bookshelf = bookshelf
 
-    def make_book(self, title: str, author: str, isbn: int, pages: int, genre: str, year_published: int, in_lists: list):
-        book = Book(title, author, isbn, pages, genre, year_published)
+    def make_book(self, title: str, author: str, isbn: int, pages: int, year_published: int, in_lists: list):
+        book = Book(title, author, isbn, pages, year_published)
         return book
 
     def search_books_by_title(self, title):
@@ -56,7 +56,7 @@ class Comms:
         if not docs:
             return None
 
-        Results = namedtuple('Results', ['author', 'title', 'Year_Published', 'isbn', 'pages', 'genre'])
+        Results = namedtuple('Results', ['author', 'title', 'Year_Published', 'isbn', 'pages'])
 
         run = True
         while run is True:
@@ -64,13 +64,13 @@ class Comms:
                 book = Results(
                     author=doc.get('author_name', ['unknown author'])[0], title = doc.get('title', 'unknown title'), \
                     Year_Published = doc.get('first_publish_year', 'Unknown'), isbn = doc.get('cover_i', 'Unknown ISBN'), \
-                    pages = doc.get('number_of_pages', 0), genre = doc.get('subject', 'unknown genre'))
+                    pages = doc.get('number_of_pages', 0))
                 check = input(f"Is {book.title} by {book.author} Published {book.Year_Published} ISBN: {book.isbn} your book? Y or N: ")
-                title, author, isbn, pages, genre, year_published = book.title, book.author, book.isbn, book.pages, \
-                    book.genre, book.Year_Published
+                title, author, isbn, pages, year_published = book.title, book.author, book.isbn, book.pages, \
+                book.Year_Published
                 _in_lists = []
                 if check.lower() == 'y':
-                    instance = self.make_book(title, author, isbn, pages, genre, year_published, _in_lists)
+                    instance = self.make_book(title, author, isbn, pages, year_published, _in_lists)
                     print("")
                     return instance
                 if check.lower() == 'exit':
