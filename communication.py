@@ -29,16 +29,39 @@ from book import Book
 # Requests Documentation - https://requests.readthedocs.io/en/latest/user/quickstart/
 
 class Comms:
+    """
+    This class handles the communication with the OpenLibrary API, parses JSON results and creates book classes.
+
+    Attributes:
+        bookshelfn(Bookshelf): The bookshelf object that holds information about the books
+
+    Methods:
+        make_book(title, author, isbn, pages, year_published, in_lists): Makes a book instance.
+        search_books_by_title(title): Searches books by title in the API.
+    """
     def __init__(self, bookshelf):
         self.bookshelf = bookshelf
 
     def make_book(self, title: str, author: str, isbn: int, pages: int, year_published: int, in_lists: list):
+        """
+        Makes a book instance.
+        :param title: str: The title of the book
+        :param author: str: The author of the book
+        :param isbn: int: The ISBN of the book
+        :param pages: int: The number of pages of the book. (Set by User)
+        :param year_published: int: The year the book was published.
+        :return: Instance of the book class.
+        """
         book = Book(title, author, isbn, pages, year_published)
         return book
 
     def search_books_by_title(self, title):
         """
-        Searches Open Library for a book title and returns the JSON response. Also displays search results.
+        Takes user input and searches the OpenLibrary Search API. Results from the API are returned as a JSON file and
+        are parsed into a namedtuple. The user is asked if this book is their choice, if yes the tuple is used to
+        pass parameters into the make_book function. If no, the next tuple is created.
+        :param title: str: The title of the book
+        :return: Book class instance
         """
         print("Searching Open Library for a book title...")
         print("To exit search results type 'Exit'")

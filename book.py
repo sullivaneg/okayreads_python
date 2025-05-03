@@ -45,7 +45,7 @@ class Book:
     Getters/Setters:
         rating, date_read, in_lists
     """
-    def __init__(self, title: str, author: str, isbn: int, pages: int, year_published: str = None, _in_lists: list = None):
+    def __init__(self, title: str, author: str, isbn: int, pages: int, year_published: int = None, _in_lists: list = None):
         """
         Initialize the book object.
         """
