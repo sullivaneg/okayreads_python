@@ -40,17 +40,14 @@ class Stats:
         df = self.create_stats_df()
         df['Date Read'] = pd.to_datetime(df['Date Read'])
 
-        books_per_year= defaultdict(int)
-        for year in df['Date Read'].dt.year:
-            books_per_year[year] = 0
-
-        for year in books_per_year:
-            num_books = df[df['Date Read'].dt.year == year]
-            books_per_year[year] = num_books.shape[0]
+        # Source: Perplexity AI
+        # Notes: I was debugging and I took this entire line
+        counts = df['Date Read'].dt.year.value_counts().sort_index()
+        # --END AI--
 
         # Prepare for matplotlib
-        years = sorted(books_per_year.keys())
-        books = books_per_year.values()
+        years = counts.index.tolist()
+        books = counts.values.tolist()
 
         # Matplotlib Graph
         plt.figure(figsize=(12, 10))
@@ -74,19 +71,15 @@ class Stats:
 
         # --END STACK OVERFLOW--
 
-        books_per_month = defaultdict(int)
-        for i in range(1, 13):
-            # Source: Perplexity AI
-            # Prompt: What would the python pandas equivalent to SELECT date FROM df WHERE month == month
-            # Response: df[df['date_read'].dt.month == month]
-            num_books = df_temp[df_temp['Date Read'].dt.month == i]
-            #--END AI CODE--
+        # Perplexity AI
+        # I was debugging
+        counts = df_temp['Date Read'].dt.month.value_counts().reindex(range(1, 13), fill_value=0)
+        # -- END AI --
 
-            books_per_month[i] = num_books.shape[0]
 
         #Prepping for matplotlib
-        months = sorted(books_per_month.keys())
-        num_books = books_per_month.values()
+        months = counts.index.tolist()
+        num_books = counts.values.tolist()
 
         #Matplotlib Graph
         plt.figure(figsize = (12, 10))
@@ -125,7 +118,7 @@ class Stats:
 
         #Prepare for matplotlib
         years = sorted(pages_per_year.keys())
-        pages = pages_per_year.values()
+        pages = [pages_per_year[year] for year in years]
 
         # Matplotlib Graph
         plt.figure(figsize=(12, 10))
@@ -138,6 +131,7 @@ class Stats:
 
     def pages_by_month(self, year):
         pages_per_month = defaultdict(int)
+
         for book in self.bookshelf.books_read:
             if book.date_read.year == year:
                 month = book.date_read.month
@@ -145,7 +139,7 @@ class Stats:
 
         # Prepping for matplotlib
         months = sorted(pages_per_month.keys())
-        pages = pages_per_month.values()
+        pages = [pages_per_month[month] for month in months]
 
         # Matplotlib Graph
         plt.figure(figsize=(12, 10))

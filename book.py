@@ -23,6 +23,15 @@ Note: For some persistent bugs I used Perplexity AI to help me debug.
 # Authors: Abigail Gehlbach, Charles Justus, Emma Sullivan
 
 class Book:
+    """
+    This class represents a book object that the user can add to different lists and interact with.
+
+    Attributes:
+        title (str): The title of the book.
+        author (str): The author of the book.
+        isbn (str): The ISBN of the book.
+        pages (int): The number of pages of the book. Default
+    """
     def __init__(self, title: str, author: str, isbn: int, pages: int, genre: str = '', year_published: int = None, _in_lists: list = None):
         self.title = title
         self.author = author

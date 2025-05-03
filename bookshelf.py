@@ -48,13 +48,18 @@ class Bookshelf:
 
     def add_book(self, title):
         result = self.search_bookshelf(title)
-        for book in result:
-            choice = input(f"From your bookshelf: {book.to_short_string()} | Is this your book? Y or N: ")
-            if choice.lower() == 'y':
-                result = book
-                break
-            if choice.lower() == 'n':
-                continue
+        if result:
+            for book in result:
+                choice = input(f"From your bookshelf: {book.to_short_string()} | Is this your book? Y or N: ")
+                if choice.lower() == 'y':
+                    result = book
+                    break
+                if choice.lower() == 'n' and len(result) == 1:
+                    result = False
+                    break
+                if choice.lower() == 'n':
+                    result.remove(book)
+                    continue
 
         if not result:
             result = self.comms.search_books_by_title(title)
@@ -342,11 +347,17 @@ class Bookshelf:
                                         item.profile_string()
                                         print("__________________________________________")
                                         print("1. Change Rating")
-                                        print("2. Exit")
+                                        print("2. Add to Favorites")
+                                        print("3. Exit")
                                         change_rating = input("Enter your choice: ")
                                         if change_rating == "1":
                                             rating = input("Enter your new rating: ")
                                             item.rating = rating
+                                        if change_rating == "2":
+                                            if "favorites" not in item.in_lists:
+                                                item.in_lists.append("favorites")
+                                            if "favorites" in item.in_lists:
+                                                print(f"{item.title} is already in your favorite list")
                                         break_outer = True
                                         break
                                     elif choice == "n":

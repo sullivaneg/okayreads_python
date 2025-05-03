@@ -29,7 +29,7 @@ import pickle_bookshelf
 # Original Code from: CSI-260-01 Library Project
 # Group: Abigail Gehlbach, Charles Justus, Emma Sullivan, Sebastian Dominguez
 # Author: Abigail Gehlbach
-# Note: Specific lines in this module that used Abigail's code as source code are marked with the pickle(cucumber) emoji
+# Note: Specific lines in3 this module that used Abigail's code as source code are marked with the pickle(cucumber) emoji
 
 today = date.today()
 
