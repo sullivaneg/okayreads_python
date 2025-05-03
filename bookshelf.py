@@ -23,6 +23,35 @@ from datetime import datetime
 import pickle_bookshelf as pb
 
 class Bookshelf:
+    """
+    This class represents the bookshelf object which holds the book objects and does actions to them. Also functions as
+    the main interface.
+
+    Attributes:
+        date_created (datetime): keeps track of when the bookshelf was created.
+
+        books_read (list): list of the books read by the user.
+        want_to_read(list): list of the books the user wants to read.
+        favorites(list): list of user's favorite books.
+        self._username (str): the username of the user. Default: None
+        self.comms: the instance of the communication class the bookshelf class instance uses. Default: None
+        self.stats: the instance of the statistics class the bookshelf class instance uses. Default: None
+
+    Methods:
+        profile(self): prints out the profile of the user.
+        add_book(self, title): adds a book to the bookshelf by adding it to one of the lists.
+        remove_book(self, title): removes a book from the bookshelf by removing it from the list it's in.
+        search_bookshelf(string): internal search of the bookshelf books.
+        export data(from_list, title, author, isbn, my_rating, average_rating, publisher, binding, year_published,
+                    original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books):
+                    returns completed lists for the create_df method.
+        create_df(): creates a pandas dataframe from the bookshelf's lists.
+        interface(): The main interface of the program, allows the user to navigate through different pages of options.
+
+    Getters/Setters:
+        username: sets/gets the username of the user. Default: None
+
+    """
     def __init__(self, date_created):
         self.date_created = date_created
         self.books_read = []
@@ -33,6 +62,10 @@ class Bookshelf:
         self.stats = None
 
     def profile(self):
+        """
+        Returns User's profile information.
+        :return: str
+        """
         print(f'{self.username}\'s profile')
         print(f'Profile created: {self.date_created}')
         print(f'Books read: {len(self.books_read)}')
@@ -40,13 +73,26 @@ class Bookshelf:
 
     @property
     def username(self):
+        """
+        Returns the username of the user.
+        :return: str
+        """
         return self._username
 
     @username.setter
     def username(self, username):
+        """
+        Sets the username of the user.
+        :param username:
+        """
         self._username = username
 
     def add_book(self, title):
+        """
+        Adds a book to the bookshelf by adding it to one of the lists.
+        :param title:
+        :return: nothing
+        """
         result = self.search_bookshelf(title)
         if result:
             for book in result:
@@ -145,6 +191,12 @@ class Bookshelf:
                 break
 
     def remove_book(self, book_list, results):
+        """
+        Removes a book from one of the lists.
+        :param book_list: which list the user would like to remove a book from.
+        :param results: The results of the search, user will choose whether they want to remove the book or not.
+        :return: nothing or an empty list of there are no search results.
+        """
         if results:
             break_outer = False
             for item in results:
@@ -187,6 +239,27 @@ class Bookshelf:
 
     def export_data(self, from_list, title, author, isbn, my_rating, average_rating, publisher, binding, year_published,
                     original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books):
+        """
+        Takes in empty lists adds book instance information to the lists. Some columns are intentionally left empty. The
+        lists match the default form to upload books to Goodreads so all columns are needed but not all need to be filled.
+        :param from_list: which list to loop through.
+        :param title: Empty List -> :returns list of titles.
+        :param author: Empty List -> :returns list of authors.
+        :param isbn: Empty List -> :returns list of ISBNs.
+        :param my_rating: Empty List -> :returns list of book ratings.
+        :param average_rating: Empty list.
+        :param publisher: Empty list.
+        :param binding: Empty list.
+        :param year_published: Empty List.
+        :param original_publication_year: Empty List -> :returns List of the publication years of the book objects.
+        :param date_read: Empty List -> :returns list of dates the books were read.
+        :param date_added: Empty List -> :returns list of the same dates as date_read.
+        :param shelves: Empty List -> :returns either 'read' or 'to-read'
+        :param bookshelves: Empty List -> :returns either 'favorites' or Empty
+        :param my_review: Empty List.
+        :param done_books: list of books that have contributed to the column lists so far.
+        :return: Filled lists to become columns in the dataframe.
+        """
         # BOOKS READ
         for item in from_list:
             if item not in done_books:
@@ -246,6 +319,9 @@ class Bookshelf:
         return df
 
     def interface(self):
+        """
+        Main interface of the program. Presents the users with menus. Takes care of error handling.
+        """
         if self.username is None:
             username = input("What would you like to be called?")
             self.username = username

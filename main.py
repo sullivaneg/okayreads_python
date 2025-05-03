@@ -30,7 +30,9 @@ import pickle_bookshelf
 # Group: Abigail Gehlbach, Charles Justus, Emma Sullivan, Sebastian Dominguez
 # Author: Abigail Gehlbach
 # Note: Specific lines in3 this module that used Abigail's code as source code are marked with the pickle(cucumber) emoji
-
+"""
+This module initializes the bookshelf class, the comms class, the stats class and starts the main interface.
+"""
 today = date.today()
 
 bookshelf = pickle_bookshelf.load_bookshelf() # 🥒

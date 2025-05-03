@@ -24,11 +24,22 @@ import os.path
 # Original code from: CSI-260-01 Library Project
 # Group: Abigail Gehlbach, Charles Justus, Emma Sullivan, Sebastian Dominguez
 # Author: Abigail Gehlbach
-
+"""
+This module is for managing pickle. Pickle is a tool to serialize information to your disk. It keeps track of the current
+books saved to the bookshelf when the user saves in the main interface.
+"""
 def save_bookshelf(bookshelf):
+    """
+    Saves bookshelf to disk.
+    :param bookshelf:
+    """
     pickle.dump(bookshelf, open("save.p", "wb"))
 
 def load_bookshelf():
+    """
+    Loads a saved bookshelf from disk.
+    :return:
+    """
     if os.path.exists("./save.p"):
         print("opened file")
         try:

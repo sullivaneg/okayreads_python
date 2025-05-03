@@ -25,10 +25,33 @@ import pandas as pd
 from datetime import datetime
 
 class Stats:
+    """
+    Class to keep track of user statistics, display graphs, and provide an interface for statistic options.
+
+    Parameters:
+        bookshelf(Bookshelf): Bookshelf object to run statistics on.
+
+    Methods:
+        create_stats_df(): more specific version of Bookshelf's create_df. Only includes books that have been read in
+            the dataframe.
+        read_by_year(): calculation of books read per year and graph creation.
+        read_by_month(year): calculation of books read per month of a given year and graph creation.
+        all_books(): a list of all the books read.
+        total_pages(): calculation of total number of pages read.
+        top_ten(): calculation of top ten ranked books.
+        pages_by_year(): calculation of pages read per year and graph creation.
+        pages_by_month(): calculation of pages read per month of a given year and graph creation.
+        interface(): the main statistics interface. Presents the user with options and handles errors.
+
+    """
     def __init__(self, bookshelf):
         self.bookshelf = bookshelf
 
     def create_stats_df(self):
+        """
+        Creates a dataframe of books read.
+        :return: dataframe
+        """
         # Create a new DF from bookshelf
         df = self.bookshelf.create_df()
 
@@ -37,6 +60,10 @@ class Stats:
         return df
 
     def read_by_year(self):
+        """
+        Calculates books read per year and uses matplotlib to create a bar graph.
+        :return: bar graph (x = years, y = number of books read)
+        """
         df = self.create_stats_df()
         df['Date Read'] = pd.to_datetime(df['Date Read'])
 
@@ -59,6 +86,11 @@ class Stats:
         plt.show()
 
     def read_by_month(self, year):
+        """
+        Calculates books read per month of a user input year and uses matplotlib to create a bar graph.
+        :param year: user input
+        :return: bar graph (x = months, y = number of books read)
+        """
         df = self.create_stats_df()
 
         # Original Source: Stack Overflow
@@ -76,7 +108,6 @@ class Stats:
         counts = df_temp['Date Read'].dt.month.value_counts().reindex(range(1, 13), fill_value=0)
         # -- END AI --
 
-
         #Prepping for matplotlib
         months = counts.index.tolist()
         num_books = counts.values.tolist()
@@ -91,16 +122,29 @@ class Stats:
         plt.show()
 
     def all_books(self):
+        """
+        User can see all their read books displayed with specific information on how they rated them and when they read them.
+        :return: nothing
+        """
         for book in self.bookshelf.books_read:
             print(book.to_short_string())
 
     def total_pages(self, read_list):
+        """
+        Calculates total number of pages read.
+        :param read_list:
+        :return: pages read (int)
+        """
         pages = 0
         for item in read_list:
             pages += item.pages
         return pages
 
     def top_ten(self):
+        """
+        Calculates top ten ranked books.
+        :return: prints out the top ten ranked books.
+        """
         # SOURCE: W3 Schools Python Sorted() Function
         # URL: https://www.w3schools.com/python/ref_func_sorted.asp
         top_ten = sorted(self.bookshelf.books_read, reverse=True)[:10]
@@ -110,6 +154,10 @@ class Stats:
             index += 1
 
     def pages_by_year(self):
+        """
+        Calculates pages read per year and uses matplotlib to create a line graph.
+        :return: line graph (x = years, y = number of pages read)
+        """
         pages_per_year = defaultdict(int)
 
         for book in self.bookshelf.books_read:
@@ -130,6 +178,11 @@ class Stats:
         plt.show()
 
     def pages_by_month(self, year):
+        """
+        Calculated the pages read per month of a user input year and uses matplotlib to create a line graph.
+        :param year: user input
+        :return: line graph (x = months, y = number of pages read)
+        """
         pages_per_month = defaultdict(int)
 
         for book in self.bookshelf.books_read:
@@ -150,17 +203,11 @@ class Stats:
         plt.title("Monthly Pages Read for Year {}".format(year))
         plt.show()
 
-    def all_books(self):
-        for book in self.bookshelf.books_read:
-            print(book.to_short_string())
-
-    def total_pages(self, read_list):
-        pages = 0
-        for item in read_list:
-            pages += item.pages
-        return pages
-
     def interface(self):
+        """
+        Main user interface for the statistics class. Handles error handling and navigating between menus.
+        :return: nothing
+        """
         while True:
             break_outer = False
             print(" ")
