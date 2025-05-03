@@ -1,72 +1,100 @@
+"""File to keep track of user statistics, display graphs, and provide an interface
+
+Author: Emma Sullivan
+Class: CSI-260-01
+Assignment: Final Project
+Due Date: 05/02/2025 11:59 PM
+
+Certification of Authenticity:
+I certify that this is entirely my own work, except where I have given
+fully-documented references to the work of others. I understand the definition
+and consequences of plagiarism and acknowledge that the assessor of this
+assignment may, for the purpose of assessing this assignment:
+- Reproduce this assignment and provide a copy to another member of academic
+- staff; and/or Communicate a copy of this assignment to a plagiarism checking
+- service (which may then retain a copy of this assignment on its database for
+- the purpose of future plagiarism checking)
+
+Note: For some persistent bugs I used Perplexity AI to help me debug.
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
-from book import Book
-from bookshelf import Bookshelf
 from collections import defaultdict
+import pandas as pd
 from datetime import datetime
 
 class Stats:
     def __init__(self, bookshelf):
         self.bookshelf = bookshelf
 
-    def read_by_year(self):
-        books_per_year = defaultdict(int)
+    def create_stats_df(self):
+        # Create a new DF from bookshelf
+        df = self.bookshelf.create_df()
 
-        for book in self.bookshelf.books_read:
-            year = book.date_read.year
-            books_per_year[year] += 1
+        # Filter to only read books
+        df = df[df['Shelves'] == 'read']
+        return df
+
+    def read_by_year(self):
+        df = self.create_stats_df()
+        df['Date Read'] = pd.to_datetime(df['Date Read'])
+
+        books_per_year= defaultdict(int)
+        for year in df['Date Read'].dt.year:
+            books_per_year[year] = 0
+
+        for year in books_per_year:
+            num_books = df[df['Date Read'].dt.year == year]
+            books_per_year[year] = num_books.shape[0]
 
         # Prepare for matplotlib
         years = sorted(books_per_year.keys())
-        books = [books_per_year[year] for year in years]
+        books = books_per_year.values()
 
-        # Matplotlib
-        # SOURCE: https://matplotlib.org/stable/plot_types/basic/plot.html#sphx-glr-plot-types-basic-plot-py
-        plt.style.use('_mpl-gallery')
-
-        # make data
-        x = years
-        y = books
-
-        # plot
-        fig, ax = plt.subplots()
-
-        ax.plot(x, y, linewidth=2.0)
-
-        ax.set(xlim=(0, 200), xticks=np.arange(1, 200),
-               ylim=(0, 200), yticks=np.arange(1, 200))
-
+        # Matplotlib Graph
+        plt.figure(figsize=(12, 10))
+        plt.bar(years, books)
+        plt.xticks(years, years)
+        plt.xlabel("Year")
+        plt.ylabel("Number of Books")
+        plt.title("Books per year")
         plt.show()
 
     def read_by_month(self, year):
+        df = self.create_stats_df()
+
+        # Original Source: Stack Overflow
+        # URL: https://stackoverflow.com/questions/46878156/pandas-filter-dataframe-rows-with-a-specific-year
+        # Author: Vaishali
+        # Date: October 23, 2017
+
+        df['Date Read'] = pd.to_datetime(df['Date Read'])
+        df_temp = df[df['Date Read'].dt.year == year]
+
+        # --END STACK OVERFLOW--
+
         books_per_month = defaultdict(int)
+        for i in range(1, 13):
+            # Source: Perplexity AI
+            # Prompt: What would the python pandas equivalent to SELECT date FROM df WHERE month == month
+            # Response: df[df['date_read'].dt.month == month]
+            num_books = df_temp[df_temp['Date Read'].dt.month == i]
+            #--END AI CODE--
 
-        for book in self.bookshelf.books_read:
-            book_year = book.date_read.year
-            if book_year == year:
-                month = book.date_read.month
-                books_per_month[month] += 1
+            books_per_month[i] = num_books.shape[0]
 
-        # Prepare for matplotlib
+        #Prepping for matplotlib
         months = sorted(books_per_month.keys())
-        pages = [books_per_month[year] for month in months]
+        num_books = books_per_month.values()
 
-        # Matplotlib
-        # SOURCE: https://matplotlib.org/stable/plot_types/basic/plot.html#sphx-glr-plot-types-basic-plot-py
-        plt.style.use('_mpl-gallery')
-
-        # make data
-        x = months
-        y = pages
-
-        # plot
-        fig, ax = plt.subplots()
-
-        ax.plot(x, y, linewidth=2.0)
-
-        ax.set(xlim=(0, 200), xticks=np.arange(1, 200),
-               ylim=(0, 200), yticks=np.arange(1, 200))
-
+        #Matplotlib Graph
+        plt.figure(figsize = (12, 10))
+        plt.bar(months, num_books)
+        plt.xticks(months, months)
+        plt.xlabel("Month")
+        plt.ylabel("Number of Books")
+        plt.title("Monthly Books for Year {}".format(year))
         plt.show()
 
     def all_books(self):
@@ -80,7 +108,8 @@ class Stats:
         return pages
 
     def top_ten(self):
-        #SOURCE: W3 Schools Python Sorted() Function https://www.w3schools.com/python/ref_func_sorted.asp
+        # SOURCE: W3 Schools Python Sorted() Function
+        # URL: https://www.w3schools.com/python/ref_func_sorted.asp
         top_ten = sorted(self.bookshelf.books_read, reverse=True)[:10]
         index = 1
         for book in top_ten:
@@ -96,56 +125,35 @@ class Stats:
 
         #Prepare for matplotlib
         years = sorted(pages_per_year.keys())
-        pages = [pages_per_year[year] for year in years]
+        pages = pages_per_year.values()
 
-        #Matplotlib
-        #SOURCE: https://matplotlib.org/stable/plot_types/basic/plot.html#sphx-glr-plot-types-basic-plot-py
-        plt.style.use('_mpl-gallery')
-
-        # make data
-        x = years
-        y = pages
-
-        # plot
-        fig, ax = plt.subplots()
-
-        ax.plot(x, y, linewidth=2.0)
-
-
-        ax.set(xlim=(0, 200), xticks=np.arange(1, 200),
-               ylim=(0, 200), yticks=np.arange(1, 200))
-
+        # Matplotlib Graph
+        plt.figure(figsize=(12, 10))
+        plt.plot(years, pages, 'bo-')
+        plt.xticks(years, years)
+        plt.xlabel("Year")
+        plt.ylabel("Number of Pages")
+        plt.title("Number of Pages Read per Year")
         plt.show()
-
 
     def pages_by_month(self, year):
         pages_per_month = defaultdict(int)
-
         for book in self.bookshelf.books_read:
             if book.date_read.year == year:
                 month = book.date_read.month
                 pages_per_month[month] += book.pages
 
-        # Prepare for matplotlib
+        # Prepping for matplotlib
         months = sorted(pages_per_month.keys())
-        pages = [pages_per_month[year] for month in months]
+        pages = pages_per_month.values()
 
-        # Matplotlib
-        # SOURCE: https://matplotlib.org/stable/plot_types/basic/plot.html#sphx-glr-plot-types-basic-plot-py
-        plt.style.use('_mpl-gallery')
-
-        # make data
-        x = months
-        y = pages
-
-        # plot
-        fig, ax = plt.subplots()
-
-        ax.plot(x, y, linewidth=2.0)
-
-        ax.set(xlim=(0, 200), xticks=np.arange(1, 200),
-               ylim=(0, 200), yticks=np.arange(1, 200))
-
+        # Matplotlib Graph
+        plt.figure(figsize=(12, 10))
+        plt.plot(months, pages, 'bo-')
+        plt.xticks(months, months)
+        plt.xlabel("Month")
+        plt.ylabel("Number of Pages")
+        plt.title("Monthly Pages Read for Year {}".format(year))
         plt.show()
 
     def all_books(self):
@@ -199,13 +207,13 @@ class Stats:
                         try:
                             year = int(year)
                             flag = False
+                            print("Books Read by Month")
+                            print("_____________________________________")
+                            self.read_by_month(year)
                             break
                         except ValueError:
                             continue
 
-                    print("Books Read by Month")
-                    print("_____________________________________")
-                    self.read_by_month(year)
                     break
                 if choice == "5":
                     print("Pages Read by Year")
@@ -219,12 +227,12 @@ class Stats:
                         try:
                             year = int(year)
                             flag = False
+                            print("Pages Read by Month")
+                            print("_____________________________________")
+                            self.pages_by_month(year)
                             break
                         except ValueError:
                             continue
-                    print("Pages Read by Month")
-                    print("_____________________________________")
-                    self.read_by_month(year)
                     break
                 if choice == "7":
                     break_outer = True

@@ -1,6 +1,24 @@
-import pandas as pd
+"""File for the main interface of the code as well as most functions that affect the bookshelf
 
-from communication import *
+Author: Emma Sullivan
+Class: CSI-260-01
+Assignment: Final Project
+Due Date: 05/02/2025 11:59 PM
+
+Certification of Authenticity:
+I certify that this is entirely my own work, except where I have given
+fully-documented references to the work of others. I understand the definition
+and consequences of plagiarism and acknowledge that the assessor of this
+assignment may, for the purpose of assessing this assignment:
+- Reproduce this assignment and provide a copy to another member of academic
+- staff; and/or Communicate a copy of this assignment to a plagiarism checking
+- service (which may then retain a copy of this assignment on its database for
+- the purpose of future plagiarism checking)
+
+Note: For some persistent bugs I used Perplexity AI to help me debug.
+"""
+
+import pandas as pd
 from datetime import datetime
 import pickle_bookshelf as pb
 
@@ -72,7 +90,10 @@ class Bookshelf:
                         print("Invalid input. Please enter a number. ")
                         continue
 
-                # Source: https://stackoverflow.com/questions/70634943/python-datetime-check-if-user-input-date-matches-format
+                # Original Code from: Stack Overflow
+                # URL: https://stackoverflow.com/questions/70634943/python-datetime-check-if-user-input-date-matches-format
+                # Author: arshovon
+                # Date: January 8, 2022
                 while True:
                     check = input("Please enter the date you read this book in the format YYYY-MM-DD: ")
                     try:
@@ -82,6 +103,7 @@ class Bookshelf:
                     except ValueError:
                         print("Invalid input. Please enter a date in the format YYYY-MM-DD: ")
                         continue
+                # END STACK OVERFLOW
 
                 while True:
                     check = input("How many pages did your book have?: ")
@@ -194,6 +216,29 @@ class Bookshelf:
         return (title, author, isbn, my_rating, average_rating, publisher, binding, year_published, original_publication_year,
                 date_read, date_added, shelves, bookshelves, my_review, done_books)
 
+    def create_df(self):
+        # Some columns are intentionally left blank, goodreads doesn't require all the columns to be populated
+        title, author, isbn, my_rating, average_rating, publisher, binding, year_published, \
+            original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books = \
+            [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
+
+        self.export_data(self.books_read, title, author, isbn, my_rating, average_rating, publisher, binding,
+                         year_published, original_publication_year, date_read, date_added, shelves, bookshelves,
+                         my_review, done_books)
+        self.export_data(self.want_to_read, title, author, isbn, my_rating, average_rating,
+                         publisher, binding, year_published, original_publication_year,
+                         date_read, date_added, shelves, bookshelves, my_review, done_books)
+
+        # Create Dataframe
+        # SOURCES: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
+        data = {'Title': title, 'Author': author, 'ISBN': isbn, 'My Rating': my_rating,
+                'Average Rating': average_rating,
+                'Publisher': publisher, 'binding': binding, 'Year Published': year_published,
+                'Original Publication Year':
+                    original_publication_year, 'Date Read': date_read, 'Date Added': date_added, 'Shelves': shelves,
+                'Bookshelves': bookshelves, 'My Review': my_review}
+        df = pd.DataFrame(data)
+        return df
 
     def interface(self):
         if self.username is None:
@@ -353,33 +398,19 @@ class Bookshelf:
 
             # CHOICE 6: EXPORT DATA AS EXCEL FILE
             if choice == '6':
-                # Some columns are intentionally left blank, goodreads doesn't require all the columns to be populated
-                title, author, isbn, my_rating, average_rating, publisher, binding, year_published, \
-                    original_publication_year, date_read, date_added, shelves, bookshelves, my_review, done_books = \
-                    [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
-
-                self.export_data(self.books_read, title, author, isbn, my_rating, average_rating, publisher, binding,
-                                 year_published,original_publication_year, date_read, date_added, shelves, bookshelves,
-                                 my_review, done_books)
-                self.export_data(self.want_to_read, title, author, isbn, my_rating, average_rating,
-                                  publisher, binding, year_published, original_publication_year,
-                                  date_read, date_added, shelves, bookshelves, my_review, done_books)
-
-                #Create Dataframe
-                # SOURCES: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
-                data = {'Title': title, 'Author': author, 'ISBN': isbn, 'My Rating': my_rating, 'Average Rating': average_rating,
-                        'Publisher': publisher, 'binding': binding, 'Year Published':year_published, 'Original Publication Year':
-                        original_publication_year, 'Date Read': date_read, 'Date Added': date_added, 'Shelves': shelves,
-                        'Bookshelves': bookshelves, 'My Review': my_review}
-                df = pd.DataFrame(data)
-
+                df = self.create_df()
                 print("Exporting to bookshelf.xlsx...")
                 print(df)
 
                 #Export to Excel
-                #SOURCES: My final CSI160 Project / https://stackoverflow.com/questions/55170300/how-to-save-a-pandas-dataframe-to-an-excel-file
+                # Original code from: Final CSI-160 Project Champlain College
+                # Author: Emma Sullivan
+                # Date: November 2024
+
                 df.to_excel("bookshelf.xlsx", index=False)
                 print("Exported to bookshelf.xlsx")
+
+                # END FINAL 160 CODE
 
             if choice == '7':
                 print("Saving...")

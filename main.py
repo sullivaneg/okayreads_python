@@ -1,3 +1,23 @@
+"""Main Module for the okayreads project code
+
+Author: Emma Sullivan
+Class: CSI-260-01
+Assignment: Final Project
+Due Date: 05/02/2025 11:59 PM
+
+Certification of Authenticity:
+I certify that this is entirely my own work, except where I have given
+fully-documented references to the work of others. I understand the definition
+and consequences of plagiarism and acknowledge that the assessor of this
+assignment may, for the purpose of assessing this assignment:
+- Reproduce this assignment and provide a copy to another member of academic
+- staff; and/or Communicate a copy of this assignment to a plagiarism checking
+- service (which may then retain a copy of this assignment on its database for
+- the purpose of future plagiarism checking)
+
+Note: For some persistent bugs I used Perplexity AI to help me debug.
+"""
+
 # Main module
 from bookshelf import Bookshelf
 from communication import Comms
@@ -5,8 +25,11 @@ from stats import Stats
 from datetime import date
 import pickle_bookshelf
 
-#SOURCE: Abbi Gehlbeck wrote the pickle part for our library project, I repurposed it, anything with the pickle emoji \
-# is a part that I'm citing to her
+# 🥒
+# Original Code from: CSI-260-01 Library Project
+# Group: Abigail Gehlbach, Charles Justus, Emma Sullivan, Sebastian Dominguez
+# Author: Abigail Gehlbach
+# Note: Specific lines in this module that used Abigail's code as source code are marked with the pickle(cucumber) emoji
 
 today = date.today()
 

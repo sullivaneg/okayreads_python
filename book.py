@@ -1,3 +1,27 @@
+"""File for the book class which stores book attributes
+
+Author: Emma Sullivan
+Class: CSI-260-01
+Assignment: Final Project
+Due Date: 05/02/2025 11:59 PM
+
+Certification of Authenticity:
+I certify that this is entirely my own work, except where I have given
+fully-documented references to the work of others. I understand the definition
+and consequences of plagiarism and acknowledge that the assessor of this
+assignment may, for the purpose of assessing this assignment:
+- Reproduce this assignment and provide a copy to another member of academic
+- staff; and/or Communicate a copy of this assignment to a plagiarism checking
+- service (which may then retain a copy of this assignment on its database for
+- the purpose of future plagiarism checking)
+
+Note: For some persistent bugs I used Perplexity AI to help me debug.
+"""
+
+# Original Code from CSI-260-01 Library Project
+# Group: Abigail Gehlbach, Charles Justus, Emma Sullivan, Sebastian Dominguez
+# Authors: Abigail Gehlbach, Charles Justus, Emma Sullivan
+
 class Book:
     def __init__(self, title: str, author: str, isbn: int, pages: int, genre: str = '', year_published: int = None, _in_lists: list = None):
         self.title = title
@@ -15,6 +39,8 @@ class Book:
 
     def __str__(self):
         return f'{self.title} by {self.author}, {self.pages} pages, published in {self.year_published}(ISBN: {self.isbn})'
+
+    # --END CODE FROM CSI-260-01 LIBRARY PROJECT--
 
     def __repr__(self):
         return "Book({}{}{}{}{}{}{})".format(self.title, self.author, self.isbn, self.pages, self.genre, self.year_published, self._in_lists)

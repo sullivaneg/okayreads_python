@@ -1,10 +1,30 @@
-# Communicates with the API and creates book classes
+"""File for the Communication class that communicates with the API and creates book classes
+
+Author: Emma Sullivan
+Class: CSI-260-01
+Assignment: Final Project
+Due Date: 05/02/2025 11:59 PM
+
+Certification of Authenticity:
+I certify that this is entirely my own work, except where I have given
+fully-documented references to the work of others. I understand the definition
+and consequences of plagiarism and acknowledge that the assessor of this
+assignment may, for the purpose of assessing this assignment:
+- Reproduce this assignment and provide a copy to another member of academic
+- staff; and/or Communicate a copy of this assignment to a plagiarism checking
+- service (which may then retain a copy of this assignment on its database for
+- the purpose of future plagiarism checking)
+
+Note: For some persistent bugs I used Perplexity AI to help me debug.
+"""
+
 import json
 import requests as rq
 from collections import namedtuple
 from book import Book
 
-# Sources: Working with APIs in Python - Code in 10 Minutes by VideoLab on Youtube
+# CODE LOOSELY SOURCED FROM:
+# Working with APIs in Python - Code in 10 Minutes by VideoLab on Youtube
 # Working with JSON - https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON
 # Requests Documentation - https://requests.readthedocs.io/en/latest/user/quickstart/
 
